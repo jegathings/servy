@@ -39,23 +39,15 @@ User-Agent: ExampleBrowser/1.0
 Accept: */*
 """
 
-requests = fn ->
-  """
-  wildthings:
-  #{wildthings}\n
-  wildlife:
-  #{wildlife}\n
-  tamethings:
-  #{tamethings}\n
-  bears:
-  #{bears}\n
-  bears_id:
-  #{bears_id}\n
-  bearz:
-  #{bearz}\n
-  """
-end
+new_bear = """
+GET /bears/new HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
 
-menu = fn -> IO.write(requests.()) end
+"""
+requests = [wildthings, wildlife, tamethings, bears, bears_id, bearz, new_bear]
+
+menu = fn -> IO.inspect(requests) end
 
 alias Servy.Handler

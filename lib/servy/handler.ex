@@ -4,14 +4,23 @@ defmodule Servy.Handler do
     |> parse
     |> rewrite_path
     |> route
+    |> track
     |> emojify
     |> format_response
-    |> track
-    |> IO.write()
+
+    # |> track
+    # |> IO.write()
   end
 
-  def track(%{status: 404, path: path} = conv) do
-    IO.puts("Warning: #{path} is on the loose!")
+  def track(%{status: status, path: path} = conv) do
+    case conv do
+      %{status: 404} ->
+        IO.puts("Warning: #{path} is on the loose!")
+
+      _ ->
+        nil
+    end
+
     conv
   end
 
@@ -45,6 +54,13 @@ defmodule Servy.Handler do
       |> String.split(" ")
 
     %{method: method, path: path, resp_body: "", status: nil}
+  end
+
+  def route(%{method: "GET", path: "/pages/" <> file} = conv) do
+    Path.expand("../../pages", __DIR__)
+    |> Path.join(file <> ".html")
+    |> File.read()
+    |> handle_file(conv)
   end
 
   def route(%{method: "GET", path: path, resp_body: resp_body} = conv) do
