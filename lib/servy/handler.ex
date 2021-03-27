@@ -15,7 +15,7 @@ defmodule Servy.Handler do
     |> track
     |> emojify
     |> format_response
-    |> IO.write
+    |> IO.write()
   end
 
   def emojify(%Conv{status: status} = conv) do
@@ -61,6 +61,15 @@ defmodule Servy.Handler do
       %Conv{path: "/bears", resp_body: ""} ->
         %Conv{conv | status: 403, resp_body: "Deleteing a bear is forbidden."}
     end
+  end
+
+  # name=Baloo&type=Brown
+  def route(%Conv{method: "POST", path: "/bears"} = conv) do
+    %{
+      conv
+      | status: 201,
+        resp_body: "Created a #{conv.params["type"]} bear named #{conv.params["name"]}!"
+    }
   end
 
   def route(%Conv{method: "GET", path: "/about"} = conv) do
