@@ -2,6 +2,7 @@ defmodule Servy.Handler do
   @pages_path Path.expand("../../pages", __DIR__)
 
   alias Servy.Conv
+  alias Servy.BearController
 
   import Servy.Plugins, only: [rewrite_path: 1, track: 1]
   import Servy.Parser, only: [parse: 1]
@@ -46,11 +47,10 @@ defmodule Servy.Handler do
         %Conv{conv | status: 200, resp_body: "Cats, dogs, and hamsters"}
 
       %Conv{path: "/bears", resp_body: ""} ->
-        %Conv{conv | status: 200, resp_body: "Teddy, Smokey, and Paddington"}
-
+        BearController.index(conv)
       %Conv{path: "/bears?id=" <> id, resp_body: ""} ->
-        %Conv{conv | status: 200, resp_body: "Bear #{id}"}
-
+        params = Map.put(conv.params, "id", id)
+        BearController.show(conv, params)
       _ ->
         %Conv{conv | status: 404, resp_body: "No matches for #{path}"}
     end
@@ -65,11 +65,7 @@ defmodule Servy.Handler do
 
   # name=Baloo&type=Brown
   def route(%Conv{method: "POST", path: "/bears"} = conv) do
-    %{
-      conv
-      | status: 201,
-        resp_body: "Created a #{conv.params["type"]} bear named #{conv.params["name"]}!"
-    }
+    BearController.create(conv, conv.params)
   end
 
   def route(%Conv{method: "GET", path: "/about"} = conv) do
