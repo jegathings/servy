@@ -39,27 +39,27 @@ defmodule Servy.Handler do
 
   def route(%Conv{method: "GET", path: path, resp_body: resp_body} = conv) do
     case conv do
-      %{path: "/wildthings", resp_body: ""} ->
-        %{conv | status: 200, resp_body: "Bears, lions, and tigers"}
+      %Conv{path: "/wildthings", resp_body: ""} ->
+        %Conv{conv | status: 200, resp_body: "Bears, lions, and tigers"}
 
-      %{path: "/mildthings", resp_body: ""} ->
-        %{conv | status: 200, resp_body: "Cats, dogs, and hamsters"}
+      %Conv{path: "/mildthings", resp_body: ""} ->
+        %Conv{conv | status: 200, resp_body: "Cats, dogs, and hamsters"}
 
-      %{path: "/bears", resp_body: ""} ->
-        %{conv | status: 200, resp_body: "Teddy, Smokey, and Paddington"}
+      %Conv{path: "/bears", resp_body: ""} ->
+        %Conv{conv | status: 200, resp_body: "Teddy, Smokey, and Paddington"}
 
-      %{path: "/bears?id=" <> id, resp_body: ""} ->
-        %{conv | status: 200, resp_body: "Bear #{id}"}
+      %Conv{path: "/bears?id=" <> id, resp_body: ""} ->
+        %Conv{conv | status: 200, resp_body: "Bear #{id}"}
 
       _ ->
-        %{conv | status: 404, resp_body: "No matches for #{path}"}
+        %Conv{conv | status: 404, resp_body: "No matches for #{path}"}
     end
   end
 
   def route(%Conv{method: "DELETE", path: path, resp_body: resp_body} = conv) do
     case conv do
-      %{path: "/bears", resp_body: ""} ->
-        %{conv | status: 403, resp_body: "Deleteing a bear is forbidden."}
+      %Conv{path: "/bears", resp_body: ""} ->
+        %Conv{conv | status: 403, resp_body: "Deleteing a bear is forbidden."}
     end
   end
 
@@ -80,14 +80,3 @@ defmodule Servy.Handler do
     """
   end
 end
-
-# request = """
-# GET /wildthings HTTP/1.1
-# Host: example.com
-# User-Agent: ExampleBrowser/1.0
-# Accept: */*
-# """
-
-# response = Servy.Handler.handle(request)
-
-# IO.puts response
