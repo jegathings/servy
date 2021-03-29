@@ -22,4 +22,11 @@ defmodule Servy.Plugins do
         conv
     end
   end
+
+  def log(%Conv{} = conv) do
+    if Mix.env == :dev do
+      IO.inspect conv
+    end
+    conv
+  end
 end
